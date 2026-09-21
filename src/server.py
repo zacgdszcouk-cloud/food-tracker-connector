@@ -26,16 +26,41 @@ import time
 from typing import Annotated
 
 from mcp.server.fastmcp import Context, FastMCP
+from mcp.server.transport_security import TransportSecuritySettings
 from pydantic import Field
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import HTMLResponse, JSONResponse
 from starlette.routing import Route
+from urllib.parse import urlparse
 
 from . import db
 from . import recipes as recipe_engine
 from . import web
 
-mcp = FastMCP("Food Tracker")
+
+def _transport_security() -> TransportSecuritySettings:
+    """DNS-rebinding protection that also allows the public deployment host.
+
+    FastMCP auto-allows only localhost. In production we additionally allow
+    the host from PUBLIC_ORIGIN (e.g. https://food-tracker-connector.onrender.com),
+    otherwise every MCP request to the public URL gets a 421.
+    """
+    allowed_hosts = ["127.0.0.1:*", "localhost:*", "[::1]:*"]
+    allowed_origins = ["http://127.0.0.1:*", "http://localhost:*", "http://[::1]:*"]
+    public_origin = os.environ.get("PUBLIC_ORIGIN", "").strip().rstrip("/")
+    if public_origin:
+        host = urlparse(public_origin).hostname
+        if host and host not in ("127.0.0.1", "localhost", "::1"):
+            allowed_hosts.append(host)
+            allowed_origins.append(public_origin)
+    return TransportSecuritySettings(
+        enable_dns_rebinding_protection=True,
+        allowed_hosts=allowed_hosts,
+        allowed_origins=allowed_origins,
+    )
+
+
+mcp = FastMCP("Food Tracker", transport_security=_transport_security())
 
 
 # ---------- helpers ----------

@@ -13,7 +13,7 @@ services:
       # ephemeral and resets on redeploy/restart. Fine for testing; use a
       # paid plan with a disk (or external DB) before public submission.
       # Set for real before public deploy:
-      # - key: PUBLIC_ORIGIN
-      #   value: https://food-tracker-connector.onrender.com
+      - key: PUBLIC_ORIGIN
+        value: https://food-tracker-connector.onrender.com
       # - key: SUPPORT_EMAIL
       #   value: support@<your-domain>
