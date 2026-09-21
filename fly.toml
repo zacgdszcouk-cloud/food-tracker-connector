@@ -27,4 +27,4 @@ primary_region = "iad"
   PORT = "8000"
   # Set for real before deploy:
   # PUBLIC_ORIGIN = "https://<your-domain>"
-  # SUPPORT_EMAIL = "support@<your-domain>"
+  # SUPPORT_EMAIL = "Mendelsohnnewsletter@gmail.com"

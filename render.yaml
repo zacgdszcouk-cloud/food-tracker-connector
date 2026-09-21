@@ -15,5 +15,5 @@ services:
       # Set for real before public deploy:
       - key: PUBLIC_ORIGIN
         value: https://food-tracker-connector.onrender.com
-      # - key: SUPPORT_EMAIL
-      #   value: support@<your-domain>
+      - key: SUPPORT_EMAIL
+        value: Mendelsohnnewsletter@gmail.com
